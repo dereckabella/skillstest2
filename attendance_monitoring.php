@@ -203,7 +203,7 @@ if (isset($_POST['searchByDate'])) {
                 <div>
                     
                     <p>Rate per Hour: <?php echo number_format($ratePerHour, 2); ?></p>
-                    <p>Salary<?php echo number_format($salary, 2); ?></p>
+                    <p>Salary:<?php echo number_format($salary, 2); ?></p>
                 </div>
             </div>
         <?php endif; ?>
