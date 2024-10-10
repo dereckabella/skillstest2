@@ -8,7 +8,11 @@ if (isset($_POST['submit'])) {
     $attDate = $_POST['attDate'];
     $attTimeIn = $_POST['attTimeIn'];
     $attTimeOut = $_POST['attTimeOut'];
-    $attStat = $_POST['attStat'];
+    $attStat = 'Present'; // Assuming default status is 'Present'
+
+    // Combine date and time for datetime fields
+    $attTimeIn = $attDate . ' ' . $attTimeIn;
+    $attTimeOut = $attDate . ' ' . $attTimeOut;
 
     // Check if employee ID exists
     $empCheckQuery = "SELECT empID FROM employees WHERE empID = '$empID'";

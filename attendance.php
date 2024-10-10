@@ -41,10 +41,12 @@ if (isset($_GET['cancel_id'])) {
 </head>
 <body>
     <h2>Attendance Records</h2>
+    <a href="index.html">Back to Main Menu</a>
     <table border="1">
         <tr>
             <th>Record ID</th>
             <th>Employee ID</th>
+            <th>Date</th>
             <th>Date/Time In</th>
             <th>Date/Time Out</th>
             <th>Status</th>
@@ -54,6 +56,7 @@ if (isset($_GET['cancel_id'])) {
             <tr>
                 <td><?php echo $record['attRN']; ?></td>
                 <td><?php echo $record['empID']; ?></td>
+                <td><?php echo $record['attDate']; ?></td>
                 <td><?php echo $record['attTimeIn']; ?></td>
                 <td><?php echo $record['attTimeOut']; ?></td>
                 <td><?php echo $record['attStat']; ?></td>
