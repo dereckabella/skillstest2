@@ -15,6 +15,7 @@ $result = $conn->query($sql);
 
     <body>
         <a href="add_employee.php">Add Employee</a>
+        <a href="index.html">Back to Menu</a>
         <table border="1">
             <tr>
                 <th>Employee ID</th>
