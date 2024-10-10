@@ -21,7 +21,7 @@ $result = $conn->query($sql);
                 <th>Dept</th>
                 <th>Employee Name</th>
                 <th>Employee Email</th>
-                <th>Employee Phone Number</th>
+                <th>Rate Per Hour</th>
                 <th>Actions</th>
             </tr>
             <?php
@@ -29,14 +29,14 @@ $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
             ?>
                     <tr>
-                    <td><?php echo $row['empCode']; ?></td>
+                    <td><?php echo $row['empID']; ?></td>
                     <td><?php echo $row['depCode']; ?></td>
-                    <td><?php echo $row['empName']; ?></td>
-                    <td><?php echo $row['empEmail']; ?></td>
-                    <td><?php echo $row['empTelNo']; ?></td>
+                    <td><?php echo $row['empFName']; ?></td>
+                    <td><?php echo $row['empLName']; ?></td>
+                    <td><?php echo $row['empRPH']; ?></td>
                     <td>
-                        <a href="edit_employee.php?empCode=<?php echo $row['empCode']; ?>">Edit</a>
-                        <a href="delete_employee.php?empCode=<?php echo $row['empCode']; ?>">Delete</a>
+                        <a href="edit_employee.php?empCode=<?php echo $row['empID']; ?>">Edit</a>
+                        <a href="delete_employee.php?empCode=<?php echo $row['empID']; ?>">Delete</a>
                     </td>
                     </tr>
             <?php
