@@ -20,8 +20,8 @@ $result = $conn->query($sql);
             <tr>
                 <th>Employee ID</th>
                 <th>Dept</th>
-                <th>Employee Name</th>
-                <th>Employee Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Rate Per Hour</th>
                 <th>Actions</th>
             </tr>
