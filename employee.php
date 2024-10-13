@@ -36,8 +36,8 @@ $result = $conn->query($sql);
                     <td><?php echo $row['empLName']; ?></td>
                     <td><?php echo $row['empRPH']; ?></td>
                     <td>
-                        <a href="edit_employee.php?empCode=<?php echo $row['empID']; ?>">Edit</a>
-                        <a href="delete_employee.php?empCode=<?php echo $row['empID']; ?>">Delete</a>
+                        <a href="edit_employee.php?empID=<?php echo $row['empID']; ?>">Edit</a>
+                        <a href="delete_employee.php?empID=<?php echo $row['empID']; ?>">Delete</a>
                     </td>
                     </tr>
             <?php

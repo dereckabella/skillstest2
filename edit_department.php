@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
         <label for="depCode">Department Code:</label>
         <select id="depCode" name="depCode" required>
             <?php foreach ($departments as $department): ?>
-                <option value="<?php echo htmlspecialchars($department['depCode']); ?>"><?php echo htmlspecialchars($department['depName']); ?></option>
+                <option value="<?php echo htmlspecialchars($department['depCode']); ?>"><?php echo ($department['depName']); ?></option>
             <?php endforeach; ?>
         </select><br><br>
         
