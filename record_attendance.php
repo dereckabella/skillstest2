@@ -49,6 +49,33 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
     <title>Record Attendance</title>
+    <style>
+         table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 8px 16px;
+        display: inline-block;
+        border: 1px solid black;
+    }
+    </style>
 </head>
 <body>
     <h2>Record Attendance</h2>

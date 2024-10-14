@@ -30,9 +30,19 @@ if(isset($_POST['submit'])){
 <!DOCTYPE html>
     <head>
         <title>Add Department</title>
+        <style>
+            a {
+                text-decoration: none;
+                color: black;
+                padding: 8px 16px;
+                display: inline-block;
+                border: 1px solid black;
+            }
+        </style>
     </head>
 
     <body>
+        <a href="department.php">Back to Department</a>
         <form action="add_department.php" method="post">
             <label for="depName">Department Name:</label><br>
             <input type="text" id="depName" name="depName"><br>
