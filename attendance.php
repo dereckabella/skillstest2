@@ -1,31 +1,22 @@
-<?php
+<?php 
 
 include 'connector.php';
 
-// Fetch attendance records
-$attendanceRecords = [];
-$sql = "SELECT attRN, empID, attDate, attTimeIn, attTimeOut, attStat FROM attendance";
-$attResult = mysqli_query($conn, $sql);
 
-if ($attResult) {
-    while ($row = mysqli_fetch_assoc($attResult)) {
-        $attendanceRecords[] = $row;
-    }
-}
+$sql = "SELECT attRN, attDate, attTimeIn, attTimeOut, attStat, empID FROM attendance";
+$result = $conn->query($sql); 
 
-// Handle cancellation of attendance
+
 if (isset($_GET['cancel_id'])) {
     $attRN = $_GET['cancel_id'];
 
-    // Update the status to "Cancelled"
     $sql = "UPDATE attendance SET attStat = 'Cancelled' WHERE attRN = '$attRN'";
-
     if ($conn->query($sql) === TRUE) {
         echo "
-        <script>
-            alert('Attendance status updated to Cancelled');
-            window.location.href='attendance.php';
-        </script>
+            <script>
+                alert('Status changed to cancelled');
+                window.location.href='attendance.php';
+            </script>
         ";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -34,66 +25,54 @@ if (isset($_GET['cancel_id'])) {
 
 ?>
 
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Attendance Records</title>
+    <head>
+        <style>
+           
+        </style>
+    </head>
 
-    <style>
-         table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table, th, td {
-        border: 1px solid black;
-    }
-
-    th, td {
-        padding: 15px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    a {
-        text-decoration: none;
-        color: black;
-        padding: 8px 16px;
-        display: inline-block;
-        border: 1px solid black;
-    }
-    </style>
-</head>
-<body>
-    <h2>Attendance Records</h2>
-    <a href="index.html">Back to Main Menu</a>
-    <table border="1">
-        <tr>
-            <th>Record ID</th>
-            <th>Employee ID</th>
-            <th>Date</th>
-            <th>Date/Time In</th>
-            <th>Date/Time Out</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        <?php foreach ($attendanceRecords as $record): ?>
+    <body>
+      
+        <a href="record_attendance.php">Add Attendance</a>
+        <a href="index.html">Back to Menu</a>
+        
+      
+        <table border="1">
             <tr>
-                <td><?php echo $record['attRN']; ?></td>
-                <td><?php echo $record['empID']; ?></td>
-                <td><?php echo $record['attDate']; ?></td>
-                <td><?php echo $record['attTimeIn']; ?></td>
-                <td><?php echo $record['attTimeOut']; ?></td>
-                <td><?php echo $record['attStat']; ?></td>
-                <td><a href="attendance.php?cancel_id=<?php echo $record['attRN']; ?>">Cancel</a></td>
+                <th>Record #</th>
+                <th>Emp ID</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
 
-    <h2>Record Attendance</h2>
-    <a href="record_attendance.php">Record Attendance</a>
-</body>
+            <?php
+                // Check if any results were returned
+                if ($result->num_rows > 0) {
+                  
+                    while ($row = $result->fetch_assoc()) {
+            ?>
+                <tr>
+                    <td><?php echo $row['attRN'] ?></td>
+                    <td><?php echo $row['empID'] ?></td>
+                    <td><?php echo $row['attDate'] ?></td>
+                    <td><?php echo $row['attTimeIn'] ?></td>
+                    <td><?php echo $row['attTimeOut'] ?></td>
+                    <td><?php echo $row['attStat'] ?></td>
+                    <td>
+                       
+                        <a href="attendance.php?cancel_id=<?php echo $row['attRN'] ?>">Cancel</a>
+                    </td>
+                </tr>
+            <?php
+                    }  
+                } else {
+                    echo "<tr><td colspan='7'>No attendance records found</td></tr>";
+                }
+            ?>
+        </table>
+    </body>
 </html>

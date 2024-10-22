@@ -2,38 +2,34 @@
 
 include 'connector.php';
 
-$employee = null;
 $departments = [];
-
-// Fetch departments for the dropdown
 $sql = "SELECT depCode, depName FROM departments";
-$depResult = mysqli_query($conn, $sql);
+$depResult = $conn->query($sql);
 
-if ($depResult) {
-    while ($row = mysqli_fetch_assoc($depResult)) {
+if($depResult) {
+    while($row = $depResult->fetch_assoc()) {
         $departments[] = $row;
     }
 }
 
-// Fetch employee details if empID is set
-if (isset($_GET['empID'])) {
+if(isset($_GET['empID'])) {
     $empID = $_GET['empID'];
     $sql = "SELECT * FROM employees WHERE empID = '$empID'";
-    $empResult = mysqli_query($conn, $sql);
+    $empResult = $conn->query($sql);
 
-    if ($empResult && mysqli_num_rows($empResult) > 0) {
-        $employee = mysqli_fetch_assoc($empResult);
+    if($empResult->num_rows > 0) {
+        $employee = $empResult->fetch_assoc();
     } else {
         echo "
         <script>
             alert('Employee ID does not exist');
-            window.location.href='employee.php';
+            window.location.href='employees.php';
         </script>";
+        exit();
     }
 }
 
-// Update employee details if form is submitted
-if (isset($_POST['submit'])) {
+if(isset($_POST['submit'])) {
     $empID = $_POST['empID'];
     $empFName = $_POST['empFName'];
     $empLName = $_POST['empLName'];
@@ -44,10 +40,11 @@ if (isset($_POST['submit'])) {
 
     if ($conn->query($sql) === TRUE) {
         echo "
-        <script>
-            alert('Employee successfully updated');
-            window.location.href='employee.php';
-        </script>";
+            <script>
+                alert('Employee Updated Successfully');
+                window.location.href='employee.php';
+            </script>
+        ";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -55,39 +52,37 @@ if (isset($_POST['submit'])) {
 
 ?>
 
-<!DOCTYPE html>
+
 <html>
-<head>
-    <title>Edit Employee</title>
-</head>
-<body>
-    <h2>Edit Employee</h2>
-    <?php if ($employee): ?>
-        <form method="post" action="edit_employee.php">
-            <input type="hidden" name="empID" value="<?php echo $employee['empID']; ?>">
-            
-            <label for="empFName">First Name:</label>
-            <input type="text" id="empFName" name="empFName" value="<?php echo $employee['empFName']; ?>" required><br><br>
-            
-            <label for="empLName">Last Name:</label>
-            <input type="text" id="empLName" name="empLName" value="<?php echo $employee['empLName']; ?>" required><br><br>
-            
-            <label for="empRPH">Rate per Hour:</label>
-            <input type="text" id="empRPH" name="empRPH" value="<?php echo $employee['empRPH']; ?>" required><br><br>
-            
-            <label for="depCode">Department:</label>
-            <select id="depCode" name="depCode" required>
+    <head>
+        <style>
+
+        </style>
+    </head>
+
+
+    <body>
+        <form action="edit_employee.php" method="POST">
+
+            <input type="hidden" id="empID" name="empID" value="<?php echo $employee['empID']; ?>">
+
+            <label for="depCode">Department Assigned:</label>
+            <select id="depCode" name="depCode">
                 <?php foreach ($departments as $department): ?>
-                    <option value="<?php echo $department['depCode']; ?>" <?php if ($department['depCode'] == $employee['depCode']) echo 'selected'; ?>>
-                        <?php echo $department['depName']; ?>
-                    </option>
+                    <option value="<?php echo($department['depCode']); ?>"><?php echo ($department['depName']);?></option>
                 <?php endforeach; ?>
             </select><br><br>
-            
-            <input type="submit" name="submit" value="Update Employee">
+
+            <label for="empFName">Employee First Name:</label>
+            <input type="text" id="empFName" name="empFName" value="<?php echo $employee['empFName']; ?>"><br><br>
+
+            <label for="empLName">Employee Last Name:</label>
+            <input type="text" id="empLName" name="empLName" value="<?php echo $employee['empLName']; ?>"><br><br>
+
+            <label for="empRPH">Employee Rate Per Hour:</label>
+            <input type="text" id="empRPH" name="empRPH" value="<?php echo $employee['empRPH']; ?>"><br><br>
+
+            <input type="submit" name="submit" value="Edit Employee">
         </form>
-    <?php else: ?>
-        <p>Employee not found.</p>
-    <?php endif; ?>
-</body>
+    </body>
 </html>

@@ -1,25 +1,26 @@
-<?php
+<?php 
 
 include 'connector.php';
 
-if (isset($_GET['empCode'])) {
-    $empCode = $_GET['empCode'];
+if(isset($_GET['empID'])) {
+    $empID = $_GET['empID'];
 
-    $sqlAttendance = "DELETE FROM attendance WHERE empID = '$empCode'";
+    $sqlAttendance = "DELETE FROM attendance WHERE empID = '$empID'";
     if ($conn->query($sqlAttendance) === TRUE) {
 
-        $sqlEmployee = "DELETE FROM employees WHERE empID = '$empCode'";
-        if ($conn->query($sqlEmployee) === TRUE) {
+        $sql = "DELETE FROM employees WHERE empID = '$empID'";
+        if ($conn->query($sql) === TRUE) {
             echo "
-            <script>
-                alert('EMPLOYEE SUCCESSFULLY DELETED');
-                window.location.href='employee.php';
-            </script>";
+                <script>
+                    alert('Employee Deleted Successfully');
+                    window.location.href='employee.php';
+                </script>
+            ";
         } else {
-            echo "Error deleting employee: " . $conn->error;
+            echo "Error deleting employee: " .  $conn->error;
         }
     } else {
-        echo "Error deleting related attendance records: " . $conn->error;
+        echo "Error deleting related to attendance: " . $conn->error;
     }
 }
 

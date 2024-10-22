@@ -1,45 +1,49 @@
-<?php
+<?php 
 
 include 'connector.php';
 
-// Handle form submission to record attendance
-if (isset($_POST['submit'])) {
+$employee = null;
+
+// Step 1: Search for Employee
+if (isset($_POST['search'])) {
     $empID = $_POST['empID'];
-    $attDate = $_POST['attDate'];
-    $attTimeIn = $_POST['attTimeIn'];
-    $attTimeOut = $_POST['attTimeOut'];
-    $attStat = 'Present'; // Assuming default status is 'Present'
+    $sqlEmp = "SELECT * FROM employees WHERE empID = '$empID'";
+    $empResult = $conn->query($sqlEmp);
 
-    // Combine date and time for datetime fields
-    $attTimeIn = $attDate . ' ' . $attTimeIn;
-    $attTimeOut = $attDate . ' ' . $attTimeOut;
-
-    // Check if employee ID exists
-    $empCheckQuery = "SELECT empID FROM employees WHERE empID = '$empID'";
-    $empCheckResult = mysqli_query($conn, $empCheckQuery);
-
-    if (mysqli_num_rows($empCheckResult) > 0) {
-        // Employee ID exists, record attendance
-        $sql = "INSERT INTO attendance (empID, attDate, attTimeIn, attTimeOut, attStat) VALUES ('$empID', '$attDate', '$attTimeIn', '$attTimeOut', '$attStat')";
-
-        if ($conn->query($sql) === TRUE) {
-            echo "
-            <script>
-                alert('ATTENDANCE SUCCESSFULLY RECORDED');
-                window.location.href='attendance.php';
-            </script>
-            ";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    if ($empResult->num_rows > 0) {
+        $employee = $empResult->fetch_assoc();
     } else {
-        // Employee ID does not exist, show alert
         echo "
         <script>
             alert('Employee ID does not exist');
             window.location.href='record_attendance.php';
-        </script>
-        ";
+        </script>";
+        exit();
+    }
+}
+
+// Step 2: Record Attendance
+if (isset($_POST['submit'])) {
+    $empID = $_POST['empID'];  
+    $attDate = $_POST['attDate'];
+    $attTimeIn = $_POST['attTimeIn'];
+    $attTimeOut = $_POST['attTimeOut'];
+    $attStat = 'Present';
+
+    $attTimeIn = $attDate . ' ' . $attTimeIn;
+    $attTimeOut = $attDate . ' ' . $attTimeOut;
+
+    $sql = "INSERT INTO attendance (empID, attDate, attTimeIn, attTimeOut, attStat)
+            VALUES ('$empID', '$attDate', '$attTimeIn', '$attTimeOut', '$attStat')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "
+        <script>
+            alert('Attendance Record Successfully');
+            window.location.href='attendance.php';
+        </script>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 
@@ -49,51 +53,38 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
     <title>Record Attendance</title>
-    <style>
-         table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table, th, td {
-        border: 1px solid black;
-    }
-
-    th, td {
-        padding: 15px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    a {
-        text-decoration: none;
-        color: black;
-        padding: 8px 16px;
-        display: inline-block;
-        border: 1px solid black;
-    }
-    </style>
 </head>
 <body>
     <h2>Record Attendance</h2>
-    <a href="attendance.php">Back to Attendance Records</a>
-    <form method="post" action="record_attendance.php">
-        <label for="empID">Employee ID:</label>
-        <input type="text" id="empID" name="empID" required><br><br>
-        
-        <label for="attDate">Date:</label>
-        <input type="date" id="attDate" name="attDate" required><br><br>
-        
-        <label for="attTimeIn">Time In:</label>
-        <input type="time" id="attTimeIn" name="attTimeIn" required><br><br>
-        
-        <label for="attTimeOut">Time Out:</label>
-        <input type="time" id="attTimeOut" name="attTimeOut" required><br><br>
-        
-        <input type="submit" name="submit" value="Record Attendance">
-    </form>
+
+    <!-- Step 1: Search for Employee -->
+    <?php if (!$employee): ?>
+        <form method="post" action="record_attendance.php">
+            <label for="empID">Employee ID:</label>
+            <input type="text" id="empID" name="empID" required><br><br>
+            <input type="submit" name="search" value="Search Employee">
+        </form>
+    <?php endif; ?>
+
+    <!-- Step 2: Record Attendance -->
+    <?php if ($employee): ?>
+        <form method="post" action="record_attendance.php">
+            <input type="hidden" name="empID" value="<?php echo $employee['empID']; ?>">
+            
+            <label for="empName">Employee Name:</label>
+            <input type="text" id="empName" name="empName" value="<?php echo $employee['empFName'] . ' ' . $employee['empLName']; ?>" readonly><br><br>
+            
+            <label for="attDate">Date:</label>
+            <input type="date" id="attDate" name="attDate" required><br><br>
+            
+            <label for="attTimeIn">Time In:</label>
+            <input type="time" id="attTimeIn" name="attTimeIn" required><br><br>
+            
+            <label for="attTimeOut">Time Out:</label>
+            <input type="time" id="attTimeOut" name="attTimeOut" required><br><br>
+            
+            <input type="submit" name="submit" value="Record Attendance">
+        </form>
+    <?php endif; ?>
 </body>
 </html>
