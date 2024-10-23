@@ -2,7 +2,7 @@
 
 include 'connector.php';
 
-if (isset($_GET['depCode'])) {
+if (isset($_GET['depCode']) && !isset($_GET['confirm'])) {
     $depCode = $_GET['depCode'];
 
     // Show confirmation prompt
@@ -16,7 +16,7 @@ if (isset($_GET['depCode'])) {
     </script>";
 }
 
-if (isset($_GET['confirm']) && $_GET['confirm'] == 'yes') {
+if (isset($_GET['confirm']) && $_GET['confirm'] == 'yes' && isset($_GET['depCode'])) {
     $depCode = $_GET['depCode'];
 
     $sqlAttendance = "DELETE FROM attendance WHERE empID IN (SELECT empID FROM employees WHERE depCode = '$depCode')";
