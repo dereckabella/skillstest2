@@ -56,12 +56,13 @@ if(isset($_POST['submit'])) {
 <html>
     <head>
         <style>
-
+            
         </style>
     </head>
 
 
     <body>
+        <a href="index.html">Back to Menu</a>
         <form action="edit_employee.php" method="POST">
 
             <input type="hidden" id="empID" name="empID" value="<?php echo $employee['empID']; ?>">
